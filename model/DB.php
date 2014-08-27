@@ -202,10 +202,10 @@ class DB {
 	 * @param int $errorLevel The level of error reporting to enable for the query
 	 * @return SS_Query
 	 */
-	public static function query($sql, $errorLevel = E_USER_ERROR) {
+	public static function query($sql, $errorLevel = E_USER_ERROR, $dbName = 'default') {
 		self::$lastQuery = $sql;
 		
-		return self::getConn()->query($sql, $errorLevel);
+		return self::getConn($dbName)->query($sql, $errorLevel);
 	}
 
 	/**

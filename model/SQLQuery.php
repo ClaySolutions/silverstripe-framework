@@ -89,6 +89,12 @@ class SQLQuery {
 	protected $replacementsNew = array();
 
 	/**
+	 * which db connection should we use
+	 * @var string
+	 */
+	public $connName = 'default';
+
+	/**
 	 * Construct a new SQLQuery.
 	 *
 	 * @param array $select An array of SELECT fields.
@@ -944,7 +950,7 @@ class SQLQuery {
 	 * @return SS_Query
 	 */
 	public function execute() {
-		return DB::query($this->sql(), E_USER_ERROR);
+		return DB::query($this->sql(), E_USER_ERROR, $this->connName);
 	}
 	
 	/**
