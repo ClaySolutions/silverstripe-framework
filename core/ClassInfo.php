@@ -84,7 +84,7 @@ class ClassInfo {
 			self::subclassesFor($class));
 
 		foreach ($classes as $class) {
-			if (self::hasTable($class)) $result[$class] = $class;
+			if (self::hasTable($class) || get_parent_class($class) == 'DataObject') $result[$class] = $class;
 		}
 
 		return $result;
