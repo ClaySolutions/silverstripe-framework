@@ -1143,6 +1143,9 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 			return false;
 		}
 
+		// MODIFICATION: Set connectionName allowing for extension with other databases.
+		$this->connectionName = 'default';
+
 		$this->onBeforeWrite();
 		if($this->brokenOnWrite) {
 			user_error("$this->class has a broken onBeforeWrite() function."
@@ -1196,11 +1199,12 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				// New records have their insert into the base data table done first, so that they can pass the
 				// generated primary key on to the rest of the manipulation
 				$baseTable = $ancestry[0];
-				
-				if((!isset($this->record['ID']) || !$this->record['ID']) && isset($ancestry[0])) {	
-
-					DB::query("INSERT INTO \"{$baseTable}\" (\"Created\") VALUES (" . DB::getConn()->now() . ")");
-					$this->record['ID'] = DB::getGeneratedID($baseTable);
+				if((!isset($this->record['ID']) || !$this->record['ID']) && isset($ancestry[0])) {
+					// MODIFICATION: Added connectionName as argument.
+					DB::query("INSERT INTO \"{$baseTable}\" (\"Created\") VALUES (" . DB::getConn($this->connectionName)->now() . ")",
+						E_USER_ERROR, $this->connectionName);
+					// MODIFICATION: Added connectionName as argument.
+					$this->record['ID'] = DB::getConn($this->connectionName)->getGeneratedID($baseTable);
 					$this->changed['ID'] = 2;
 
 					$isNewRecord = true;
@@ -1237,15 +1241,17 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 							$manipulation[$class]['fields']["LastEdited"] = "'".SS_Datetime::now()->Rfc2822()."'";
 							if($dbCommand == 'insert') {
 								if(!empty($this->record["Created"])) {
+									// MODIFICATION: Added connnectionName as argument.
 									$manipulation[$class]['fields']["Created"]
-										= DB::getConn()->prepStringForDB($this->record["Created"]);
+										= DB::getConn($this->connectionName)->prepStringForDB($this->record["Created"]);
 								} else {
+									// MODIFICATION: Added connnectionName as argument.
 									$manipulation[$class]['fields']["Created"]
-										= DB::getConn()->prepStringForDB(SS_Datetime::now()->Rfc2822());
+										= DB::getConn($this->connectionName)->prepStringForDB(SS_Datetime::now()->Rfc2822());
 								}
-								//echo "<li>$this->class - " .get_class($this);
+								// MODIFICATION: Added connnectionName as argument.
 								$manipulation[$class]['fields']["ClassName"]
-									= DB::getConn()->prepStringForDB($this->class);
+									= DB::getConn($this->connectionName)->prepStringForDB($this->class);
 							}
 						}
 
@@ -1265,8 +1271,9 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				if(isset($isNewRecord) && $isNewRecord && isset($manipulation[$baseTable])) {
 					$manipulation[$baseTable]['command'] = 'update';
 				}
-				
-				DB::manipulate($manipulation);
+
+				// MODIFICATION: Added connnectionName as argument.
+				DB::manipulate($manipulation, $this->connectionName);
 
 				// If there's any relations that couldn't be saved before, save them now (we have an ID here)
 				if($this->unsavedRelations) {

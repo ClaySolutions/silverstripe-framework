@@ -248,9 +248,10 @@ class DB {
 	 * 
 	 * @param array $manipulation
 	 */
-	public static function manipulate($manipulation) {
+	public static function manipulate($manipulation, $connectionName='default') {
+		// MODIFICATION: Added connectionName for connection switching.
 		self::$lastQuery = $manipulation;
-		return self::getConn()->manipulate($manipulation);
+		return self::getConn($connectionName)->manipulate($manipulation);
 	}
 
 	/**
