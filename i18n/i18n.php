@@ -2017,12 +2017,18 @@ class i18n extends Object implements TemplateGlobalProvider {
 		$argList = func_get_args();
 		$argNum = func_num_args();
 		//_t($entity, $string = "", $context (optional), $injectionArray (optional))
-		$injectionArray = self::config()->default_injection_variables;
+		$defaultInjectionArray = self::config()->default_injection_variables;
 		for($i = 0; $i < $argNum; $i++) {
 			if (is_array($argList[$i])) {   //we have reached the injectionArray
 				// merge with the default injections with $argList as highest priotity
 				// any array in the args will be the injection array
-				$injectionArray = array_merge($injectionArray ,$argList[$i]);
+				$injectionArray = $argList[$i];
+				// add defaults as last values and do not overwrite the set injections
+				foreach ($defaultInjectionArray as $key => $value) {
+					if(!isset($injectionArray[$key])) {
+						$injectionArray[$key] = $value;
+					}
+				}
 			}
 		}
 
@@ -2058,11 +2064,19 @@ class i18n extends Object implements TemplateGlobalProvider {
 
 					// Return translation only if we found a match thats not the entity itself (Zend fallback)
 				if($translation && $translation != $entity) {
-						$returnValue = $translation;
+					$returnValue = $translation;
 					break 2;
-					}
 				}
 			}
+		}
+
+		// if has variables the new way or if the injectionArray is user for %s
+		if(strpos($returnValue, '{') !== false || isset($injectionArray) && count($injectionArray) != count($defaultInjectionArray)) {
+			$injectionArray = isset($injectionArray) ? $injectionArray : $defaultInjectionArray;
+		// else fallback to sprintf
+		} else {
+			$injectionArray = array();
+		}
 
 		// inject the variables from injectionArray (if present)
 		if(count($injectionArray)) {
