@@ -1349,8 +1349,8 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 		//  - update the code to just delete the base table, and rely on cascading deletes in the DB to do the rest
 		//    obviously, that means getting requireTable() to configure cascading deletes ;-)
 		$srcQuery = DataList::create($this->class, $this->model)->where("ID = $this->ID")->dataQuery()->query();
-		foreach($srcQuery->queriedTables() as $table) {
-			$query = new SQLQuery("*", array('"' . $table . '"'));
+		if($srcQuery->queriedTables()) {
+			$query = new SQLQuery("*", array('"' . $this->ClassName . '"'));
 			$query->setWhere("\"ID\" = $this->ID");
 			$query->setDelete(true);
 			$query->execute();
