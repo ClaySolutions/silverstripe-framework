@@ -1,7 +1,7 @@
 {
-	"name": "silverstripe/framework",
+	"name": "clay/silverstripe-framework",
 	"type": "silverstripe-module",
-	"description": "The SilverStripe framework",
+	"description": "The Clay SilverStripe framework",
 	"homepage": "http://silverstripe.org",
 	"license": "BSD-3-Clause",
 	"keywords": ["silverstripe", "framework"],
@@ -28,7 +28,7 @@
 		}
 	},
 	"autoload": {
-		"classmap": ["tests/behat/features/bootstrap"]	
+		"classmap": ["tests/behat/features/bootstrap"]
 	},
 	"minimum-stability": "dev"
 }
