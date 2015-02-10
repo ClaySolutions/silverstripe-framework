@@ -2106,6 +2106,7 @@ class i18n extends Object implements TemplateGlobalProvider {
 			} else {
 				// Standard placeholder replacement with named injections and variable order.
 				foreach($injectionArray as $variable => $injection) {
+					$injection   = _t('Variable.' . $variable, $injection) ?: $injection;
 					$placeholder = '{'.$variable.'}';
 					$returnValue = str_replace($placeholder, $injection, $returnValue, $count);
 					if(!$count) {
