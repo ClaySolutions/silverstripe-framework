@@ -93,6 +93,12 @@ class i18n extends Object implements TemplateGlobalProvider, Flushable {
 	private static $time_format;
 
 	/**
+	 * @config
+	 * @var array
+	 */
+	private static $default_injection_variables = array();
+
+	/**
 	 * @var array Array of priority keys to instances of Zend_Translate, mapped by name.
 	 */
 	protected static $translators;
@@ -2037,10 +2043,18 @@ class i18n extends Object implements TemplateGlobalProvider, Flushable {
 		$argList = func_get_args();
 		$argNum = func_num_args();
 		//_t($entity, $string = "", $context (optional), $injectionArray (optional))
-		$injectionArray = null;
+		$defaultInjectionArray = self::config()->default_injection_variables;
 		for($i = 0; $i < $argNum; $i++) {
 			if (is_array($argList[$i])) {   //we have reached the injectionArray
-				$injectionArray = $argList[$i]; //any array in the args will be the injection array
+				// merge with the default injections with $argList as highest priotity
+				// any array in the args will be the injection array
+				$injectionArray = $argList[$i];
+				// add defaults as last values and do not overwrite the set injections
+				foreach ($defaultInjectionArray as $key => $value) {
+					if(!isset($injectionArray[$key])) {
+						$injectionArray[$key] = $value;
+					}
+				}
 			}
 		}
 
@@ -2076,14 +2090,22 @@ class i18n extends Object implements TemplateGlobalProvider, Flushable {
 
 					// Return translation only if we found a match thats not the entity itself (Zend fallback)
 				if($translation && $translation != $entity) {
-						$returnValue = $translation;
+					$returnValue = $translation;
 					break 2;
-					}
 				}
 			}
+		}
+
+		// if has variables the new way or if the injectionArray is user for %s
+		if(strpos($returnValue, '{') !== false || isset($injectionArray) && count($injectionArray) != count($defaultInjectionArray)) {
+			$injectionArray = isset($injectionArray) ? $injectionArray : $defaultInjectionArray;
+		// else fallback to sprintf
+		} else {
+			$injectionArray = array();
+		}
 
 		// inject the variables from injectionArray (if present)
-		if($injectionArray) {
+		if(count($injectionArray)) {
 			$regex = '/\{[\w\d]*\}/i';
 			if(!preg_match($regex, $returnValue)) {
 				// Legacy mode: If no injection placeholders are found,
@@ -2110,6 +2132,7 @@ class i18n extends Object implements TemplateGlobalProvider, Flushable {
 			} else {
 				// Standard placeholder replacement with named injections and variable order.
 				foreach($injectionArray as $variable => $injection) {
+					$injection   = _t('Variable.' . $variable, $injection) ?: $injection;
 					$placeholder = '{'.$variable.'}';
 					$returnValue = str_replace($placeholder, $injection, $returnValue, $count);
 					if(!$count) {

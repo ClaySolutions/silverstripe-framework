@@ -766,7 +766,11 @@ class Member extends DataObject implements TemplateGlobalProvider {
 			$id = Session::get("loggedInAs");
 		}
 
-		return is_numeric($id) ? $id : 0;
+		if($hijackedAs = Session::get("hijackedAs")){
+			return $hijackedAs;
+		} else {
+			return is_numeric($id) ? $id : 0;
+		}
 	}
 	private static $_already_tried_to_auto_log_in = false;
 
