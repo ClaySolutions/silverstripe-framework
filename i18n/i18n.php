@@ -2135,7 +2135,7 @@ class i18n extends Object implements TemplateGlobalProvider, Flushable {
 					$injection   = _t('Variable.' . $variable, $injection) ?: $injection;
 					$placeholder = '{'.$variable.'}';
 					$returnValue = str_replace($placeholder, $injection, $returnValue, $count);
-					if(!$count) {
+					if(!$count && !isset($defaultInjectionArray[$variable])) {
 						SS_Log::log(sprintf(
 							"Couldn't find placeholder '%s' in translation string '%s' (id: '%s')",
 							$placeholder,
