@@ -2094,7 +2094,7 @@ class i18n extends Object implements TemplateGlobalProvider {
 				foreach($injectionArray as $variable => $injection) {
 					$placeholder = '{'.$variable.'}';
 					$returnValue = str_replace($placeholder, $injection, $returnValue, $count);
-					if(!$count) {
+					if(!$count && !isset($defaultInjectionArray[$variable])) {
 						SS_Log::log(sprintf(
 							"Couldn't find placeholder '%s' in translation string '%s' (id: '%s')",
 							$placeholder,
