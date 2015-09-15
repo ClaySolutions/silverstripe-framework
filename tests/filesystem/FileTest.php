@@ -249,6 +249,9 @@ class FileTest extends SapphireTest {
 	
 		$file = $this->objFromFixture('File', 'pdf');
 		$this->assertEquals("Adobe Acrobat PDF file", $file->FileType);
+
+		$file = $this->objFromFixture('File', 'gifupper');
+		$this->assertEquals("GIF image - good for diagrams", $file->FileType);
 	
 		/* Only a few file types are given special descriptions; the rest are unknown */
 		$file = $this->objFromFixture('File', 'asdf');
@@ -393,9 +396,13 @@ class FileTest extends SapphireTest {
 		$this->objFromFixture('Member', 'frontend')->logIn();
 		$this->assertFalse($file->canEdit(), "Permissionless users can't edit files");
 
-		// Test cms non-asset user
+		// Test global CMS section users
 		$this->objFromFixture('Member', 'cms')->logIn();
-		$this->assertFalse($file->canEdit(), "Basic CMS users can't edit files");
+		$this->assertTrue($file->canEdit(), "Users with all CMS section access can edit files");
+
+		// Test cms access users without file access
+		$this->objFromFixture('Member', 'security')->logIn();
+		$this->assertFalse($file->canEdit(), "Security CMS users can't edit files");
 
 		// Test asset-admin user
 		$this->objFromFixture('Member', 'assetadmin')->logIn();

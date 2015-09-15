@@ -324,7 +324,7 @@ class Hierarchy extends DataExtension {
 		}
 		
 		// Set jstree open state, or mark it as a leaf (closed) if there are no children
-		if(!$this->$numChildrenMethod()) {
+		if(!$this->owner->$numChildrenMethod()) {
 			$classes .= " jstree-leaf closed";
 		} elseif($this->isTreeOpened()) {
 			$classes .= " jstree-open";
@@ -732,7 +732,7 @@ class Hierarchy extends DataExtension {
 		
 		$children = $baseClass::get()
 			->filter('ParentID', (int)$this->owner->ID)
-			->sort('Sort', 'ASC');
+			->sort('"Sort"', 'ASC');
 		if ($afterNode) {
 			$children = $children->filter('Sort:GreaterThan', $afterNode->Sort);
 		}

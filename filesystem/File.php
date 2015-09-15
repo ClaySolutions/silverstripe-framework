@@ -305,7 +305,7 @@ class File extends DataObject {
 		$result = $this->extendedCan('canEdit', $member);
 		if($result !== null) return $result;
 		
-		return Permission::checkMember($member, 'CMS_ACCESS_AssetAdmin');
+		return Permission::checkMember($member, array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
 	}
 	
 	/**
@@ -390,7 +390,6 @@ class File extends DataObject {
 
 		//get a tree listing with only folder, no files
 		$folderTree = new TreeDropdownField("ParentID", _t('AssetTableField.FOLDER','Folder'), 'Folder');
-		$folderTree->setChildrenMethod('ChildFolders');
 
 		$fields = new FieldList(
 			new TabSet('Root',
@@ -609,7 +608,7 @@ class File extends DataObject {
 
 		// If it's changed, check for duplicates
 		if($oldName && $oldName != $name) {
-			$base = pathinfo($name, PATHINFO_BASENAME);
+			$base = pathinfo($name, PATHINFO_FILENAME);
 			$ext = self::get_file_extension($name);
 			$suffix = 1;
 
@@ -621,7 +620,7 @@ class File extends DataObject {
 				))->first()
 			) {
 				$suffix++;
-				$name = "$base-$suffix$ext";
+				$name = "$base-$suffix.$ext";
 			}
 		}
 
@@ -808,7 +807,7 @@ class File extends DataObject {
 			'htm' => _t('File.HtmlType', 'HTML file')
 		);
 		
-		$ext = $this->getExtension();
+		$ext = strtolower($this->getExtension());
 		
 		return isset($types[$ext]) ? $types[$ext] : 'unknown';
 	}

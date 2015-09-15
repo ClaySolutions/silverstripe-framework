@@ -767,7 +767,11 @@ class Security extends Controller {
 			$member = Member::create();
 			$member->FirstName = _t('Member.DefaultAdminFirstname', 'Default Admin');
 			$member->write();
-			$member->Groups()->add($adminGroup);
+			// Add member to group instead of adding group to member
+			// This bypasses the privilege escallation code in Member_GroupSet
+			$adminGroup
+				->DirectMembers()
+				->add($member);
 		}
 
 		return $member;
@@ -1047,7 +1051,8 @@ class Security extends Controller {
 	 * Set a custom log-in URL if you have built your own log-in page.
 	 */
 	public static function set_login_url($loginUrl) {
-		self::$login_url = $loginUrl;
+		Deprecation::notice('3.1', 'Use the "Security.login_url" config setting instead');
+		static::config()->update('login_url', $loginUrl);
 	}
 
 	/**
@@ -1055,7 +1060,7 @@ class Security extends Controller {
 	 * Defaults to Security/login but can be re-set with {@link set_login_url()}
 	 */
 	public static function login_url() {
-		return self::$login_url;
+		return static::config()->get('login_url');
 	}
 
 }

@@ -428,7 +428,7 @@ body.cms {
 .cms-content-actions, .cms-preview-controls {
 	margin: 0;
 	padding: $grid-y*1.5 $grid-y*1.5;
-	z-index: 0;
+	z-index: 999;
 	border-top: 1px solid lighten($color-separator, 4%);
 	@include box-shadow(
 		1px 0 0 $tab-panel-texture-color, 
@@ -906,7 +906,7 @@ body.cms {
 			vertical-align: middle;
 		}
 
-		label {
+		.view-mode-batchactions-label {
 			vertical-align: middle;
 			display: none;
 		}
@@ -922,7 +922,7 @@ body.cms {
 		&.inactive .view-mode-batchactions-wrapper {
 			border-radius: 4px;
 
-			label {
+			.view-mode-batchactions-label {
 				display: inline;
 			}
 		}
@@ -1414,11 +1414,14 @@ body.cms-dialog {
 			float:left;
 			position: relative;
 
-      label {
-			position: absolute;
-			left: 8px;
-			top: 13px;
-			font-weight: normal; color: #888;
+			label {
+				position: absolute;
+				left: 8px;
+				top: 13px;
+				font-weight: normal; 
+				color: #888;
+				width: 35px; 
+				padding-right: 0;
 			}
 
 			.middleColumn {

@@ -171,7 +171,7 @@ nl:
     TEXT2: 'wachtwoord reset link'
     TEXT3: voor
   Form:
-    CSRF_FAILED_MESSAGE: "Er lijkt een technisch probleem te zijn. Klik op de knop 'terug', ververs de pagina, en probeer het opnieuw."
+    CSRF_EXPIRED_MESSAGE: 'Uw sessie is verlopen. Verzend het formulier opnieuw.'
     FIELDISREQUIRED: '{name} is verplicht'
     SubmitBtnLabel: Versturen
     VALIDATIONCREDITNUMBER: 'Gelieve uw credit card number {number} juist in te vullen'
@@ -181,7 +181,6 @@ nl:
     VALIDATIONSTRONGPASSWORD: 'Wachtwoorden moeten bestaan uit minstens één cijfer en één alfanumeriek karakter.'
     VALIDATOR: Validator
     VALIDCURRENCY: 'Vul een geldige munteenheid in'
-    CSRF_EXPIRED_MESSAGE: 'Uw sessie is verlopen. Verzend het formulier opnieuw.'
   FormField:
     Example: 'bv. %s'
     NONE: geen
@@ -238,7 +237,6 @@ nl:
     many_many_Members: Leden
   GroupImportForm:
     Help1: '<p>Importeer een of meerdere groepen in <em>CSV</em>-formaat (comma-separated values). <small><a href="#" class="toggle-advanced">Toon geavanceerd gebruik</a></small></p>'
-    Help2: "<div class=\"advanced\">\n<h4>Geavanceerd gebruik</h4>\n<ul>\n<li>Toegestane kolommen: <em>%s</em></li>\n<li>Bestaande groepen worden geïdentificeerd door middel van hun unieke <em>Code</em>-waarde, en aangepast met de nieuwe waarden vanuit het geïmporteerde bestand</li>\n<li>Groepshiërarchiën kunnen aangemaakt worden door een <em>ParentCode</em>-kolom te gebruiken</li>\n<li>Toegangscodeskunnen toegewezen worden met de <em>PermissionCode</em> kolom. Bestaande toegangscodes worden niet verwijderd.</li>\n</ul>\n</div>"
     ResultCreated: '{count} groepen aangemaakt'
     ResultDeleted: '%d groepen verwijderd'
     ResultUpdated: '%d groepen aangepast'
@@ -268,8 +266,6 @@ nl:
     FROMWEB: 'Vanaf een website'
     FindInFolder: 'Zoek in map'
     IMAGEALT: 'Alternatieve tekst (alt tekst)'
-    IMAGEALTTEXT: 'Alternatieve tekst (alt-tekst) - wordt gebruikt als de afbeelding niet geladen kan worden '
-    IMAGEALTTEXTDESC: 'Voor schermlezers, of als de afbeelding niet weergegeven kan worden '
     IMAGEDIMENSIONS: Dimensies
     IMAGEHEIGHTPX: Hoogte
     IMAGETITLE: 'Tooltip (title) - Toon extra informatie over de afbeelding'
@@ -303,18 +299,13 @@ nl:
     DELETED: Verwijderd.
     DropdownBatchActionsDefault: Acties
     HELP: Help
-    PAGETYPE: 'Pagina type: '
     PERMAGAIN: 'U bent uitgelogd uit het CMS.  Als u weer wilt inloggen vul dan uw gebruikersnaam en wachtwoord hieronder in.'
-    PERMALREADY: 'Helaas, dat deel van het CMS is niet toegankelijk voor u. Hieronder kunt u als iemand anders inloggen.'
-    PERMDEFAULT: 'Geef uw e-mailadres en wachtwoord in om in te loggen op het CMS.'
-    PLEASESAVE: 'Deze pagina kon niet bijgewerkt worden, omdat deze nog niet is opgeslagen.'
     PreviewButton: Voorbeeld
     REORGANISATIONSUCCESSFUL: 'Menu-indeling is aangepast'
     SAVEDUP: Opgeslagen.
     ShowAsList: 'laat als lijst zien'
     TooManyPages: 'Te veel pagina''s'
     ValidationError: 'Validatiefout'
-    VersionUnknown: Onbekend
   LeftAndMain_Menu_ss:
     Hello: Hallo
     LOGOUT: 'Uitloggen'
@@ -392,7 +383,6 @@ nl:
     Toggle: 'Toon opmaak hulp'
   MemberImportForm:
     Help1: '<p>Importeer leden in <em>CSV</em>-formaat (comma-separated values). <small><a href="#" class="toggle-advanced">Toon geavanceerd gebruik</a></small></p>'
-    Help2: "<div class=\"advanced\">\n\t<h4>Advanced usage</h4>\n\t<ul>\n\t<li>Allowed columns: <em>%s</em></li>\n\t<li>Existing users are matched by their unique <em>Code</em> property, and updated with any new values from\n\tthe imported file.</li>\n\t<li>Groups can be assigned by the <em>Groups</em> column. Groups are identified by their <em>Code</em> property,\n\tmultiple groups can be separated by comma. Existing group memberships are not cleared.</li>\n\t</ul>\n</div>"
     ResultCreated: '{count} leden aangemaakt'
     ResultDeleted: '%d leden verwijderd'
     ResultNone: 'Geen wijzingen'
@@ -456,7 +446,6 @@ nl:
     SINGULARNAME: Rol
     Title: Titel
   PermissionRoleCode:
-    PLURALNAME: 'Machtigingen rol codes'
     PermsError: 'U moet (ADMIN) rechten hebben om de code "%s" toe te kennen'
     SINGULARNAME: 'Machtigingen rol code'
   Permissions:

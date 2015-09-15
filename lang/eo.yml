@@ -60,6 +60,8 @@ eo:
     ERRORNOTREC: 'Kiuj salutnomo / pasvorto ne estas rekonebla'
   Boolean:
     ANY: Ajna
+    NOANSWER: 'Ne'
+    YESANSWER: 'Jes'
   CMSLoadingScreen_ss:
     LOADING: Ŝargas...
     REQUIREJS: 'La CMS bezonas ke vi enŝaltis Ĝavaskripton.'
@@ -68,16 +70,35 @@ eo:
     ACCESSALLINTERFACES: 'Aliro al ĉiuj interfacoj de CMS'
     ACCESSALLINTERFACESHELP: 'Nuligas pli specifajn alirajn agordojn.'
     SAVE: Konservi
+  CMSMemberLoginForm:
+    BUTTONFORGOTPASSWORD: 'Ĉu forgesis pasvorton?'
+    BUTTONLOGIN: 'Ree ensaluti'
+    BUTTONLOGOUT: 'Adiaŭi'
+    PASSWORDEXPIRED: '<p>Via pasvorto finiĝis. <a target="_top" href="{link}">Bonvolu elekti novan.</a></p>'
   CMSPageHistoryController_versions_ss:
     PREVIEW: 'Antaŭvido de retejo'
   CMSProfileController:
     MENUTITLE: 'Mia agordaro'
+  CMSSecurity:
+    INVALIDUSER: '<p>Nevalida uzanto. <a target="_top" href="{link}">Bonvolu aŭtentigi ĉi tie</a> por daŭrigi.</p>'
+    LoginMessage: '<p>Se vi havas nekonservitan laboraĵon vi povos reveni al kie vi paŭzis reensalutante sube.</p>'
+    SUCCESS: Sukseso
+    SUCCESSCONTENT: '<p>Ensaluto suksesis. Se vi ne aŭtomate alidirektiĝos, <a target="_top" href="{link}">alklaku ĉi tie</a></p>'
+    TimedOutTitleAnonymous: 'Via seanco eltempiĝis.'
+    TimedOutTitleMember: 'He, {name}!<br />Via seanco eltempiĝis.'
   ChangePasswordEmail_ss:
     CHANGEPASSWORDTEXT1: 'Vi ŝanĝis vian pasvorton por'
     CHANGEPASSWORDTEXT2: 'Nun vi povas uzi la jenan legitimaĵon por ensaluti:'
     EMAIL: Retpoŝto
     HELLO: Saluton
     PASSWORD: Pasvorto
+  CheckboxField:
+    NOANSWER: 'Ne'
+    YESANSWER: 'Jes'
+  CheckboxFieldSetField:
+    SOURCE_VALIDATION: 'Bonvolu elekti valoron el la listo donita. {value} ne estas valida agordo'
+  CheckboxSetField:
+    SOURCE_VALIDATION: 'Bonvolu elekti valoron el la listo donita. {value} ne estas valida agordo'
   ConfirmedPasswordField:
     ATLEAST: 'Pasvorto devas esti almenaŭ {min} signojn longa.'
     BETWEEN: 'Pasvorto devas esti inter {min} kaj {max} signojn longa.'
@@ -124,6 +145,7 @@ eo:
   DropdownField:
     CHOOSE: (Elekti)
     CHOOSESEARCH: '(Elekti aŭ serĉi)'
+    SOURCE_VALIDATION: 'Bonvolu elekti valoron el la listo donita. {value} ne estas valida agordo'
   EmailField:
     VALIDATION: 'Bonvolu enigi readreson'
   Enum:
@@ -171,7 +193,8 @@ eo:
     TEXT2: 'pasvorta reagorda ligilo'
     TEXT3: por
   Form:
-    CSRF_FAILED_MESSAGE: "Ŝajne okazis teknika problemo. Bonvole alklaku la retrobutonon, \n\t\t\t\t\taktualigu vian foliumilon, kaj reprovu."
+    CSRF_EXPIRED_MESSAGE: 'Via seanco finiĝis. Bonvole resendu la formularon.'
+    CSRF_FAILED_MESSAGE: 'Ŝajne okazis teknika problemo. Bonvolu alklaki la retrobutonon, refreŝigi vian foliumilon, kaj reprovi.'
     FIELDISREQUIRED: '{name} estas bezonata'
     SubmitBtnLabel: Iri
     VALIDATIONCREDITNUMBER: 'Bonvole certigu ke vi ĝuste enigis la kreditkarton {number}'
@@ -181,7 +204,6 @@ eo:
     VALIDATIONSTRONGPASSWORD: 'Pasvorto devas havi almenaŭ unu signon kaj unu literon.'
     VALIDATOR: Validigilo
     VALIDCURRENCY: 'Bonvole enigu validan kurzon'
-    CSRF_EXPIRED_MESSAGE: 'Via seanco finiĝis. Bonvole resendu la formularon.'
   FormField:
     Example: 'ekz. %s'
     NONE: neniu
@@ -238,7 +260,6 @@ eo:
     many_many_Members: Membroj
   GroupImportForm:
     Help1: '<p>Importi unu aŭ pliaj grupojn en formato <em>CSV</em> (perkome disigitaj valoroj values). <small><a href="#" class="toggle-advanced">Vidigi spertulan uzadon</a></small></p>'
-    Help2: "<div class=\"advanced\">\n⇥<h4>Spertula uzado</h4>\n⇥<ul>\n⇥<li>Permesitaj kolumnoj: <em>%s</em></li>\n⇥<li>Ekzistantaj grupoj pariĝas per ilia unika atributo <em>Kodo</em>, kaj aktualiĝas per eventualaj valoroj el \n⇥la importita dosiero</li>\n⇥<li>Grupaj hierarkioj kreiĝas per kolumno <em>PraKodo</em>.</li>\n⇥<li>Permeskodoj estas agordeblaj per la kolumno <em>PermesKodo</em>. Ekzistantaj permeskodoj \n⇥ne nuliĝas.</li>\n⇥</ul>\n</div>"
     ResultCreated: 'Kreiĝis {count} grupoj'
     ResultDeleted: 'Forigis %d grupojn'
     ResultUpdated: 'Aktualigis %d grupojn'
@@ -247,6 +268,8 @@ eo:
   HtmlEditorField:
     ADDURL: 'Aldoni je URL'
     ADJUSTDETAILSDIMENSIONS: 'Detaloj kaj dimensioj'
+    ANCHORSCANNOTACCESSPAGE: 'Vi ne rajtas aliri la enhavon de la cela paĝo.'
+    ANCHORSPAGENOTFOUND: 'Ne trovis la celan paĝon.'
     ANCHORVALUE: Ankri
     BUTTONADDURL: 'Aldoni je url'
     BUTTONINSERT: Enmeti
@@ -268,8 +291,6 @@ eo:
     FROMWEB: 'El la TTT'
     FindInFolder: 'Serĉi en dosierujo'
     IMAGEALT: 'Alternativa teksto (alt)'
-    IMAGEALTTEXT: 'Alternativa teksto (alt) - vidiĝas se ne eblas vidigi bildon'
-    IMAGEALTTEXTDESC: 'Vidiĝas se ne eblas vidigi bildon'
     IMAGEDIMENSIONS: Dimensioj
     IMAGEHEIGHTPX: Alto
     IMAGETITLE: 'Titola teksto (ŝpruchelpilo) - por plua informo pri la bildo'
@@ -287,6 +308,7 @@ eo:
     LINKOPENNEWWIN: 'Malfermi ligilon en nova fenestro?'
     LINKTO: 'Ligilo al'
     PAGE: Paĝo
+    SUBJECT: 'Temo de retpoŝto'
     URL: URL
     URLNOTANOEMBEDRESOURCE: 'La URL ''{url}'' ne estas konvertebla al memorilo.'
     UpdateMEDIA: 'Ĝisdatigi memorilon'
@@ -303,18 +325,13 @@ eo:
     DELETED: Forigita.
     DropdownBatchActionsDefault: Agoj
     HELP: Helpo
-    PAGETYPE: 'Tipo de paĝo:'
     PERMAGAIN: 'Vin adiaŭis la CMS. Se vi volas denove saluti, enigu salutnomon kaj pasvorton malsupre.'
-    PERMALREADY: 'Bedaŭrinde vi ne povas aliri tiun parton de la CMS. Se vi volas saluti kiel iu alia, tiel faru sube'
-    PERMDEFAULT: 'Enigi vian retadreson kaj pasvorton por aliri al la CMS.'
-    PLEASESAVE: 'Bonvolu konservi paĝon: Ne eblis ĝisdatigi ĉi tiun paĝon ĉar ĝi ankoraŭ ne estas konservita.'
     PreviewButton: Antaŭvido
     REORGANISATIONSUCCESSFUL: 'Sukcese reorganizis la retejan arbon.'
     SAVEDUP: Konservita.
     ShowAsList: 'vidigi kiel liston'
     TooManyPages: 'Tro da paĝoj'
     ValidationError: 'Validiga eraro'
-    VersionUnknown: Nekonata
   LeftAndMain_Menu_ss:
     Hello: Saluton
     LOGOUT: 'Elsaluti'
@@ -350,6 +367,7 @@ eo:
     NEWPASSWORD: 'Novan pasvorton'
     NoPassword: 'Mankas pasvorto por ĉi tiu membro.'
     PASSWORD: Pasvorto
+    PASSWORDEXPIRED: 'Via pasvorto finiĝis. Bonvolu elekti novan.'
     PLURALNAME: Membroj
     REMEMBERME: 'Memoru min je la sekva fojo?'
     SINGULARNAME: Membro
@@ -392,7 +410,6 @@ eo:
     Toggle: 'Vidigi aranĝa helpo'
   MemberImportForm:
     Help1: '<p>Importi membrojn en <em>CSV-formato</em> (diskomaj valoroj ). <small><a href="#" class="toggle-advanced">Vidigi spertulan uzadon</a></small></p>'
-    Help2: "<div class=\"advanced\">\n⇥<h4>Spertula uzado</h4>\n⇥<ul>\n⇥<li>Permesitaj kolumnoj: <em>%s</em></li>\n⇥<li>Ekzistantaj uzuloj pariĝas per ilia unika atributo <em>Kodo</em>, kaj aktualiĝas per eventualaj valoroj el \n⇥la importita dosiero</li>\n⇥<li>Grupoj estas agordebla per kolumno <em>Grupoj</em>.</li>\n⇥<li>Grupoj estas identigeblaj per sia atributo <em>Kodo</em>. \nOpaj grupoj estu apartigitaj de komo. Ekzistantaj grupaj membrecoj \n⇥ne nuliĝas.</li>\n⇥</ul>\n</div>"
     ResultCreated: 'Krei {count} membrojn'
     ResultDeleted: 'Forigis %d membrojn'
     ResultNone: 'Neniu ŝanĝo'

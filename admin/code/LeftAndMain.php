@@ -76,7 +76,7 @@ class LeftAndMain extends Controller implements PermissionProvider {
 	 * @config
 	 * @var string
 	 */
-	private static $help_link = 'http://userhelp.silverstripe.org/framework/en/3.1';
+	private static $help_link = '//userhelp.silverstripe.org/framework/en/3.1';
 
 	/**
 	 * @var array
@@ -247,14 +247,20 @@ class LeftAndMain extends Controller implements PermissionProvider {
 			
 			// if no alternate menu items have matched, return a permission error
 			$messageSet = array(
-				'default' => _t('LeftAndMain.PERMDEFAULT',
-					"Please choose an authentication method and enter your credentials to access the CMS."),
-				'alreadyLoggedIn' => _t('LeftAndMain.PERMALREADY',
+				'default' => _t(
+					'LeftAndMain.PERMDEFAULT',
+					"You must be logged in to access the administration area; please enter your credentials below."
+				),
+				'alreadyLoggedIn' => _t(
+					'LeftAndMain.PERMALREADY',
 					"I'm sorry, but you can't access that part of the CMS.  If you want to log in as someone else, do"
-					. " so below"),
-				'logInAgain' => _t('LeftAndMain.PERMAGAIN',
+					. " so below."
+				),
+				'logInAgain' => _t(
+					'LeftAndMain.PERMAGAIN',
 					"You have been logged out of the CMS.  If you would like to log in again, enter a username and"
-					. " password below."),
+					. " password below."
+				),
 			);
 
 			return Security::permissionFailure($this, $messageSet);
@@ -556,7 +562,7 @@ class LeftAndMain extends Controller implements PermissionProvider {
 	public static function menu_icon_for_class($class) {
 		$icon = Config::inst()->get($class, 'menu_icon', Config::FIRST_SET);
 		if (!empty($icon)) {
-			$class = strtolower($class);
+			$class = strtolower(Convert::raw2htmlname(str_replace('\\', '-', $class)));
 			return ".icon.icon-16.icon-{$class} { background: url('{$icon}'); } ";
 		}
 		return '';
@@ -811,6 +817,12 @@ class LeftAndMain extends Controller implements PermissionProvider {
 		// Get the tree root
 		$record = ($rootID) ? $this->getRecord($rootID) : null;
 		$obj = $record ? $record : singleton($className);
+
+		// Get the current page
+		// NOTE: This *must* be fetched before markPartialTree() is called, as this
+		// causes the Hierarchy::$marked cache to be flushed (@see CMSMain::getRecord)
+		// which means that deleted pages stored in the marked tree would be removed
+		$currentPage = $this->currentPage();
 		
 		// Mark the nodes of the tree to return
 		if ($filterFunction) $obj->setMarkingFilterFunction($filterFunction);
@@ -818,10 +830,7 @@ class LeftAndMain extends Controller implements PermissionProvider {
 		$obj->markPartialTree($nodeCountThreshold, $this, $childrenMethod, $numChildrenMethod);
 		
 		// Ensure current page is exposed
-		// This call flushes the Hierarchy::$marked cache when the current node is deleted
-		// @see CMSMain::getRecord()
-		// This will make it impossible to show children under a deleted parent page
-		// if($p = $this->currentPage()) $obj->markToExpose($p);
+		if($currentPage) $obj->markToExpose($currentPage);
 		
 		// NOTE: SiteTree/CMSMain coupling :-(
 		if(class_exists('SiteTree')) {
@@ -1595,7 +1604,7 @@ class LeftAndMain extends Controller implements PermissionProvider {
 	 * @config
 	 * @var String
 	 */
-	private static $application_link = 'http://www.silverstripe.org/';
+	private static $application_link = '//www.silverstripe.org/';
 	
 	/**
 	 * Sets the href for the anchor on the Silverstripe logo in the menu
