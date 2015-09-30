@@ -173,6 +173,11 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 	);
 
 	/**
+	 * This is for clay specific database switching connection name
+	 */
+	public $connectionName = 'default';
+
+	/**
 	 * Non-static relationship cache, indexed by component name.
 	 */
 	protected $components;
@@ -1143,9 +1148,6 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 			return false;
 		}
 
-		// MODIFICATION: Set connectionName allowing for extension with other databases.
-		$this->connectionName = 'default';
-
 		$this->onBeforeWrite();
 		if($this->brokenOnWrite) {
 			user_error("$this->class has a broken onBeforeWrite() function."
@@ -1333,6 +1335,7 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 	 * Note that in Versioned objects, both Stage and Live will be deleted.
 	 *  @uses DataExtension->augmentSQL()
 	 */
+
 	public function delete() {
 		$this->brokenOnDelete = true;
 		$this->onBeforeDelete();
@@ -1356,6 +1359,7 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				? $delete_mapping[$this->ClassName]
 				: $this->ClassName
 			) . '"'));
+            $query->connName = $this->connectionName;
 			$query->setWhere("\"ID\" = $this->ID");
 			$query->setDelete(true);
 			$query->execute();
