@@ -5,6 +5,5 @@
 /.settings
 css/GridField_print.css
 admin/thirdparty/chosen/node_modules
-
-
-
+vendor/
+composer.lock
