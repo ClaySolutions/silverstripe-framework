@@ -173,6 +173,11 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 	);
 
 	/**
+	 * This is for clay specific database switching connection name
+	 */
+	public $connectionName = 'default';
+
+	/**
 	 * Non-static relationship cache, indexed by component name.
 	 */
 	protected $components;
@@ -1196,11 +1201,12 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				// New records have their insert into the base data table done first, so that they can pass the
 				// generated primary key on to the rest of the manipulation
 				$baseTable = $ancestry[0];
-				
-				if((!isset($this->record['ID']) || !$this->record['ID']) && isset($ancestry[0])) {	
-
-					DB::query("INSERT INTO \"{$baseTable}\" (\"Created\") VALUES (" . DB::getConn()->now() . ")");
-					$this->record['ID'] = DB::getGeneratedID($baseTable);
+				if((!isset($this->record['ID']) || !$this->record['ID']) && isset($ancestry[0])) {
+					// MODIFICATION: Added connectionName as argument.
+					DB::query("INSERT INTO \"{$baseTable}\" (\"Created\") VALUES (" . DB::getConn($this->connectionName)->now() . ")",
+						E_USER_ERROR, $this->connectionName);
+					// MODIFICATION: Added connectionName as argument.
+					$this->record['ID'] = DB::getConn($this->connectionName)->getGeneratedID($baseTable);
 					$this->changed['ID'] = 2;
 
 					$isNewRecord = true;
@@ -1237,15 +1243,17 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 							$manipulation[$class]['fields']["LastEdited"] = "'".SS_Datetime::now()->Rfc2822()."'";
 							if($dbCommand == 'insert') {
 								if(!empty($this->record["Created"])) {
+									// MODIFICATION: Added connnectionName as argument.
 									$manipulation[$class]['fields']["Created"]
-										= DB::getConn()->prepStringForDB($this->record["Created"]);
+										= DB::getConn($this->connectionName)->prepStringForDB($this->record["Created"]);
 								} else {
+									// MODIFICATION: Added connnectionName as argument.
 									$manipulation[$class]['fields']["Created"]
-										= DB::getConn()->prepStringForDB(SS_Datetime::now()->Rfc2822());
+										= DB::getConn($this->connectionName)->prepStringForDB(SS_Datetime::now()->Rfc2822());
 								}
-								//echo "<li>$this->class - " .get_class($this);
+								// MODIFICATION: Added connnectionName as argument.
 								$manipulation[$class]['fields']["ClassName"]
-									= DB::getConn()->prepStringForDB($this->class);
+									= DB::getConn($this->connectionName)->prepStringForDB($this->class);
 							}
 						}
 
@@ -1265,8 +1273,9 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				if(isset($isNewRecord) && $isNewRecord && isset($manipulation[$baseTable])) {
 					$manipulation[$baseTable]['command'] = 'update';
 				}
-				
-				DB::manipulate($manipulation);
+
+				// MODIFICATION: Added connnectionName as argument.
+				DB::manipulate($manipulation, $this->connectionName);
 
 				// If there's any relations that couldn't be saved before, save them now (we have an ID here)
 				if($this->unsavedRelations) {
@@ -1326,6 +1335,7 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 	 * Note that in Versioned objects, both Stage and Live will be deleted.
 	 *  @uses DataExtension->augmentSQL()
 	 */
+
 	public function delete() {
 		$this->brokenOnDelete = true;
 		$this->onBeforeDelete();
@@ -1342,8 +1352,14 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 		//  - update the code to just delete the base table, and rely on cascading deletes in the DB to do the rest
 		//    obviously, that means getting requireTable() to configure cascading deletes ;-)
 		$srcQuery = DataList::create($this->class, $this->model)->where("ID = $this->ID")->dataQuery()->query();
-		foreach($srcQuery->queriedTables() as $table) {
-			$query = new SQLQuery("*", array('"' . $table . '"'));
+		if($srcQuery->queriedTables()) {
+			$delete_mapping = array('Image' => 'File');
+			$query = new SQLQuery("*", array('"' . (
+				array_key_exists($this->ClassName, $delete_mapping)
+				? $delete_mapping[$this->ClassName]
+				: $this->ClassName
+			) . '"'));
+            $query->connName = $this->connectionName;
 			$query->setWhere("\"ID\" = $this->ID");
 			$query->setDelete(true);
 			$query->execute();

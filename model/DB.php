@@ -202,10 +202,10 @@ class DB {
 	 * @param int $errorLevel The level of error reporting to enable for the query
 	 * @return SS_Query
 	 */
-	public static function query($sql, $errorLevel = E_USER_ERROR) {
+	public static function query($sql, $errorLevel = E_USER_ERROR, $dbName = 'default') {
 		self::$lastQuery = $sql;
 		
-		return self::getConn()->query($sql, $errorLevel);
+		return self::getConn($dbName)->query($sql, $errorLevel);
 	}
 
 	/**
@@ -248,9 +248,10 @@ class DB {
 	 * 
 	 * @param array $manipulation
 	 */
-	public static function manipulate($manipulation) {
+	public static function manipulate($manipulation, $connectionName='default') {
+		// MODIFICATION: Added connectionName for connection switching.
 		self::$lastQuery = $manipulation;
-		return self::getConn()->manipulate($manipulation);
+		return self::getConn($connectionName)->manipulate($manipulation);
 	}
 
 	/**
