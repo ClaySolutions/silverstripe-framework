@@ -47,6 +47,11 @@ class ManifestFileFinder extends SS_FileFinder {
 			return false;
 		}
 
+		// Ignore any directories which contains src.
+		if (preg_match('/\/src\//', $pathname)) {
+			return false;
+		}
+
 		// Only include top level module directories which have a configuration
 		// _config.php file. However, if we're in themes mode then include
 		// the themes dir without a config file.
