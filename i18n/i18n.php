@@ -2032,42 +2032,12 @@ class i18n extends Object implements TemplateGlobalProvider {
 			}
 		}
 
-		// get current locale (either default or user preference)
-		$locale = i18n::get_locale();
-		$lang = i18n::get_lang_from_locale($locale);
-
-		// Only call getter if static isn't already defined (for performance reasons)
-		$translatorsByPrio = self::$translators;
-		if(!$translatorsByPrio) $translatorsByPrio = self::get_translators();
-
 		$returnValue = (is_string($string)) ? $string : ''; // Fall back to default string argument
 
-		foreach($translatorsByPrio as $priority => $translators) {
-			foreach($translators as $name => $translator) {
-				$adapter = $translator->getAdapter();
-
-				// at this point, we need to ensure the language and locale are loaded
-				// as include_by_locale() doesn't load a fallback.
-
-				// TODO Remove reliance on global state, by refactoring into an i18nTranslatorManager
-				// which is instanciated by core with a $clean instance variable.
-
-				if(!$adapter->isAvailable($lang)) {
-					i18n::include_by_locale($lang, (isset($_GET['flush'])));
-				}
-
-				if(!$adapter->isAvailable($locale)) {
-					i18n::include_by_locale($locale, (isset($_GET['flush'])));
-				}
-
-				$translation = $adapter->translate($entity, $locale);
-
-					// Return translation only if we found a match thats not the entity itself (Zend fallback)
-				if($translation && $translation != $entity) {
-					$returnValue = $translation;
-					break 2;
-				}
-			}
+		if ($translation = self::translate($entity, self::get_locale())) {
+		    $returnValue = $translation;
+		} elseif (self::get_locale() !== self::default_locale() && $translation = self::translate($entity, self::default_locale())) {
+		    $returnValue = $translation;
 		}
 
 		// if has variables the new way or if the injectionArray is user for %s
@@ -2124,6 +2094,40 @@ class i18n extends Object implements TemplateGlobalProvider {
 		return $returnValue;
 	}
 
+	/**
+	 * @param string $entity
+	 * @param string $locale
+	 *
+	 * @return string
+	 */
+	private static function translate($entity, $locale)
+	{
+	    $lang = i18n::get_lang_from_locale($locale);
+
+	    if (!self::$translators) {
+	        self::get_translators();
+	    }
+
+	    foreach (self::$translators as $translators) {
+	        foreach ($translators as $translator) {
+	            $adapter = $translator->getAdapter();
+
+	            if (!$adapter->isAvailable($lang)) {
+	                self::include_by_locale($lang, (isset($_GET['flush'])));
+	            }
+
+	            if (!$adapter->isAvailable($locale)) {
+	                self::include_by_locale($locale, (isset($_GET['flush'])));
+	            }
+
+	            $translation = $adapter->translate($entity, $locale);
+
+	            if ($translation && $translation != $entity) {
+	                return $translation;
+	            }
+	        }
+	    }
+	}
 
 	/**
 	 * @return array Array of priority keys to instances of Zend_Translate, mapped by name.
