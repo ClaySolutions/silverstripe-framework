@@ -342,7 +342,7 @@ class Session {
 	
 	protected static $default_session = null;
 	
-	protected static function current_session() {
+	public static function current_session() {
 		if(Controller::has_curr()) {
 			return Controller::curr()->getSession();
 		} else {
