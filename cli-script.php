@@ -2,13 +2,25 @@
 
 /**
  * File similar to main.php designed for command-line scripts
- * 
+ *
  * This file lets you execute SilverStripe requests from the command-line.  The URL is passed as the first argument to
  * the scripts.
- * 
+ *
  * @package framework
  * @subpackage core
  */
+
+$autoloadFiles = array(
+	__DIR__ . '/vendor/autoload.php',
+	__DIR__ . '/../vendor/autoload.php'
+);
+
+foreach ($autoloadFiles as $autoloadFile) {
+	if (file_exists($autoloadFile)) {
+		require $autoloadFile;
+		break;
+	}
+}
 
 /**
  * Ensure that people can't access this from a web-server
