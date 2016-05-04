@@ -7,7 +7,7 @@
  * @subpackage model
  * @see Int
  */
-class Bigint extends Int {
+class Bigint extends DBInt {
 
 	function __construct($name, $defaultVal = 0) {
 		$this->defaultVal = is_int($defaultVal) ? $defaultVal : 0;
