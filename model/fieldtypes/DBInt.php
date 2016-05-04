@@ -5,7 +5,7 @@
  * @package framework
  * @subpackage model
  */
-class Int extends DBField {
+class DBInt extends DBField {
 
 	public function __construct($name = null, $defaultVal = 0) {
 		$this->defaultVal = is_int($defaultVal) ? $defaultVal : 0;
