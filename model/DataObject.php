@@ -240,7 +240,8 @@ class DataObject extends ViewableData implements DataObjectInterface, i18nEntity
 				$classNames = ClassInfo::subclassesFor($class);
 
 				$db = DB::getConn();
-				if($db->hasField($class, 'ClassName')) {
+
+				if(in_array($class, ['File', 'Payment']) && $db->hasField($class, 'ClassName')) {
 					$existing = $db->query("SELECT DISTINCT \"ClassName\" FROM \"$class\"")->column();
 					$classNames = array_unique(array_merge($classNames, $existing));
 				}
